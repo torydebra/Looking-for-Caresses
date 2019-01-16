@@ -15,7 +15,7 @@ void chatterCallback(const sensor_msgs::Range &sensor_range)
     ROS_INFO("CULOOOOOOOOOOO");
     look_caresses_pkg::platform_control msg;
     if (sensor_range.range > 0.35) { // in meters
-        msg.body_vel.linear.x = 100;
+        msg.body_vel.linear.x = 25;
         ROS_INFO("MERDAAAAAAAAAAAAAAAAAAAA");
     }
     else {
@@ -29,8 +29,8 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "B_approach");
     ros::NodeHandle nh;
 
-   // pub = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control",100);
-    sub = nh.subscribe("/miro/rob01/platform/sensors", 1000, chatterCallback);
+    pub = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control",100);
+    sub = nh.subscribe("/miro/rob01/sensors/sonar_range", 1000, chatterCallback);
 
     ros::spin();
 
