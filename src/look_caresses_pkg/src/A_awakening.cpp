@@ -56,13 +56,8 @@ int main(int argc, char **argv)
 
     /** update loneliness value **/
     ros::Publisher pub = n.advertise<std_msgs::Int32>("loneliness", 1000);
-    std_msgs::String msg;
 
-    std::stringstream ss;
-    ss << loneliness;
-    msg.data = ss.str();
-
-    ROS_INFO("I am writing Loneliness: %s", msg.data.c_str());
+    ROS_INFO("I am writing Loneliness: %d", loneliness);
 
     std_msgs::Int32 toSend;
     toSend.data = loneliness;
