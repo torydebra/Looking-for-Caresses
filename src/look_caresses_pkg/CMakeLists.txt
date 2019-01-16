@@ -218,3 +218,6 @@ add_dependencies(A_awakening look_caresses_pkg_generate_messages_cpp)
 add_executable(B_approach src/B_approach.cpp)
 target_link_libraries(B_approach ${catkin_LIBRARIES})
 add_dependencies(B_approach look_caresses_pkg_generate_messages_cpp)
+
+catkin_install_python(PROGRAMS src/Data_input.py
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
