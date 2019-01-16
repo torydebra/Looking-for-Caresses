@@ -203,3 +203,6 @@ qtcreator-*
 CATKIN_IGNORE
 *.catkin_workspace
 
+# QT workspace
+look_caresses_miro.workspace
+
