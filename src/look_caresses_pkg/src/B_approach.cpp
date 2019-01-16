@@ -1,16 +1,16 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
-#include "look_caresses_pkg/platform_sensors.h" /**auto generated .h by gencpp. it is inside devel/include*/
+#include "look_caresses_pkg/platform_sensors.h"
 #include "look_caresses_pkg/platform_control.h"
 #include <iostream>
 #include <string>
 #include <numeric>
 #include <boost/circular_buffer.hpp>
 
-#define averageNum 20
+#define averageNum 20 // number of values to consider in the average for the sonar range
 ros::Publisher pub;
 ros::Subscriber sub;
-boost::circular_buffer<float> sonarMsgs(averageNum);
+boost::circular_buffer<float> sonarMsgs(averageNum); // to have more than 1 measure from the sonar
 
 
 void sonarCallback(const sensor_msgs::Range &sensor_range)
@@ -18,21 +18,22 @@ void sonarCallback(const sensor_msgs::Range &sensor_range)
     look_caresses_pkg::platform_control msg;
     sonarMsgs.push_front(sensor_range.range);
 
-    if (sonarMsgs.full()){ //wait to have some values of range
+    if (sonarMsgs.full()){ //wait to have "averageNum" values of range
 
+      // average between more than 1 value to avoid the errors of the sonar (sometimes returns zeros)
       float sum = std::accumulate(sonarMsgs.begin(), sonarMsgs.end(), 0.0); //0 init the sum to 0
       float average = sum/averageNum;
       ROS_INFO("Sonar Range average: %f", average);
 
       if (average > 0.15) { // in meters
-        msg.body_vel.linear.x = 30;
-        msg.body_vel.angular.z = 0.05; //because miro turns unwanted
+        msg.body_vel.linear.x = 30; // good choiche for the linear velocity
+        msg.body_vel.angular.z = 0.05; // because miro turns unwanted
       }
-      else {
+      else { // miro must not move
         msg.body_vel.linear.x = 0;
         msg.body_vel.angular.z = 0;
       }
-    } else {
+    } else { // miro must not move
       msg.body_vel.linear.x = 0;
       msg.body_vel.angular.z = 0;
     }
