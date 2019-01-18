@@ -6,9 +6,8 @@ import rospy
 from std_msgs.msg import String
 from sensor_msgs.msg import Image,CompressedImage
 from geometry_msgs.msg import Twist
-import numpy as np
-import miro_msgs
-from miro_msgs.msg import platform_config,platform_sensors,platform_state,platform_mics,platform_control,core_state,core_control,core_config,bridge_config,bridge_stream
+import numpy as np+
+from look_caresses_pkg import platform_config,platform_sensors,platform_state,platform_mics,platform_control,core_state,core_control,core_config,bridge_config,bridge_stream
 import os
 from os import listdir
 from os.path import isfile, join

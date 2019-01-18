@@ -1,5 +1,4 @@
 #include "ros/ros.h"
-#include "std_msgs/String.h"
 #include "look_caresses_pkg/platform_sensors.h"
 #include "look_caresses_pkg/platform_control.h"
 #include <iostream>
@@ -44,6 +43,20 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "B_approach");
     ros::NodeHandle nh;
+
+    // Publish the kinematic of the head to position the head up for detecting sonar range
+    ros::Rate loop_rate(1);
+    ros::Publisher pubPlat = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control", 1000);
+    look_caresses_pkg::platform_control plat_msgs_sleeping;
+    float body_config_sleeping[4] = {0.0, 0.4, 0, -0.1};
+    float body_config_speed_sleeping[4] = {0.0, -1.0, -1.0, -1.0};
+    for (int i =0; i<4; i++){
+      plat_msgs_sleeping.body_config[i] = body_config_sleeping[i];
+      plat_msgs_sleeping.body_config_speed[i] = body_config_speed_sleeping[i];
+    }
+    loop_rate.sleep();
+    pubPlat.publish(plat_msgs_sleeping);
+    ros::spinOnce();
 
     pub = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control",100);
     sub = nh.subscribe("/miro/rob01/sensors/sonar_range", 1000, sonarCallback);
