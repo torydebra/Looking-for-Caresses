@@ -38,7 +38,7 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
 
     /** read loneliness value **/
-    subLoneliness = n.subscribe("miro/rob01/look4caresses/loneliness", 1000, subLonelinessCallback);
+    subLoneliness = n.subscribe("miro/look4caresses/loneliness", 1000, subLonelinessCallback);
     while(ros::ok() && notRead){
       ros::spinOnce();
     }
@@ -78,14 +78,14 @@ int main(int argc, char **argv)
         loop_rate.sleep();
     }
 
-    ROS_INFO("I am awake =)");
+    ROS_INFO("[A] I am awake =)");
 
     /** AWAKENING PHASE */
 
     /** update loneliness value **/
-    ros::Publisher pub = n.advertise<std_msgs::Int32>("miro/rob01/look4caresses/loneliness", 1000);
+    ros::Publisher pub = n.advertise<std_msgs::Int32>("miro/look4caresses/loneliness", 1000);
 
-    ROS_INFO("I am writing Loneliness: %d", loneliness);
+    ROS_INFO("[A] I am writing Loneliness: %d", loneliness);
 
     std_msgs::Int32 toSend;
     toSend.data = loneliness;

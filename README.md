@@ -11,3 +11,9 @@ sudo pip install --ignore-installed tensorflow
 sudo apt install python-sklearn
 sudo pip install keras
 
+
+#### TO run
+Aa_ ..  needs roslaunch ... face_detect_double.launch
+
+C_.. needs il python in /src (DataInput.py)  (e un loneliness value nel topic)
+
