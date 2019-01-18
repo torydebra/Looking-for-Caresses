@@ -215,9 +215,9 @@ add_executable(A_awakening src/A_awakening.cpp)
 target_link_libraries(A_awakening ${catkin_LIBRARIES})
 add_dependencies(A_awakening look_caresses_pkg_generate_messages_cpp)
 
-#add_executable(Aa_faceDetection src/Aa_faceDetection.cpp)
-#target_link_libraries(Aa_faceDetection  ${catkin_LIBRARIES})
-#add_dependencies(Aa_faceDetection look_caresses_pkg_generate_messages_cpp)
+add_executable(Aa_faceDetection src/Aa_faceDetection.cpp)
+target_link_libraries(Aa_faceDetection  ${catkin_LIBRARIES})
+add_dependencies(Aa_faceDetection look_caresses_pkg_generate_messages_cpp)
 
 add_executable(B_approach src/B_approach.cpp)
 target_link_libraries(B_approach ${catkin_LIBRARIES})
