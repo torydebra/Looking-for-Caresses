@@ -95,7 +95,8 @@ int main(int argc, char **argv)
     look_caresses_pkg::platform_control plat_msgs_awake;
     plat_msgs_awake.eyelid_closure = 0.1;
 
-    float body_config_awake[4] = {0.0, 0.4, 0, -0.1}; //head up, sensor in front
+    //put miro head s.t. camera can work properly for face detection
+    float body_config_awake[4] = {0.0, 0.6, 0, -0.1};
     float body_config_speed_awake[4] = {0.0, -1.0, -1.0, -1.0};
     for (int i =0; i<4; i++){
       plat_msgs_awake.body_config[i] = body_config_awake[i];
@@ -107,7 +108,7 @@ int main(int argc, char **argv)
     plat_msgs_awake.ear_rotate[1] = 0.2;
     srand(time(NULL));
 
-    //publish once cosmetic thing to show awakening
+    //publish cosmetic thing to show awakening
     ros::Rate loop_rate2(1);
     for (int i =0; i<5; i++){
       plat_msgs_awake.blink_time = 5 + rand()%20;
