@@ -175,7 +175,7 @@ class miro_touch_control_ros_client:
 		print "topic_root", topic_root
 
 		# publish
-		self.pub = rospy.Publisher('classifyGesture', String, queue_size=10)    # classifyGesture is the name of the topic on which we will publish , string is the parameter
+		self.pub = rospy.Publisher('/miro/look4caresses/classifyGesture', String, queue_size=10)    # classifyGesture is the name of the topic on which we will publish , string is the parameter
 
 		####### Deleated some functions from here (compared to the orignal file)
 
