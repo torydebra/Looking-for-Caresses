@@ -60,6 +60,14 @@ add_message_files(
    core_control.msg
    platform_sensors.msg
    platform_control.msg
+   bridge_config.msg
+   bridge_stream.msg
+   core_config.msg
+   core_state.msg
+   platform_mics.msg
+   platform_config.msg
+   platform_state.msg
+   audio_event.msg
 )
 
 ## Generate services in the 'srv' folder

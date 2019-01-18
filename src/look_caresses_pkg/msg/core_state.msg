@@ -20,9 +20,9 @@ int32 time_usec			# time in usec with rollover at 1<<29
 
 #### AFFECT
 
-miro_msgs/affect emotion
-miro_msgs/affect mood
-miro_msgs/sleep sleep
+affect emotion
+affect mood
+sleep sleep
 
 
 
@@ -35,8 +35,8 @@ float32[8] priority
 
 #### SPATIAL
 
-miro_msgs/priority_peak[3] priority_peak
-miro_msgs/audio_event audio_event
+priority_peak[3] priority_peak
+audio_event audio_event
 
 
 
