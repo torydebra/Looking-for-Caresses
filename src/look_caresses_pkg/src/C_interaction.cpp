@@ -1,15 +1,23 @@
-#include <ros/ros.h>
-#include "std_msgs/String.h"
-#include "std_msgs/Int32.h"
 #include "look_caresses_pkg/platform_control.h"
 #include <string>
+#include "../header/c_interaction.h"
 
-bool notRead = true;
-int positiveApproach = 0;
-int negativeApproach = 0;
-int loneliness;
-int counterSound = 0;
-ros::Subscriber subLoneliness;
+C_interaction::C_interaction(int argc, char **argv) {
+  notRead = true;
+  positiveApproach = 0;
+  negativeApproach = 0;
+  counterSound = 0;
+
+  ros::init(argc, argv, "A_Awakening");
+  ros::NodeHandle nh;
+
+  ros::Publisher pubPlat = nh.advertise<look_caresses_pkg::platform_control>
+      ("/miro/rob01/platform/control", 1000);
+
+  /** read loneliness value **/
+  subLoneliness = nh.subscribe("miro/look4caresses/loneliness", 1000, &C_interaction::subLonelinessCallback, this);
+  subClass = nh.subscribe("/miro/look4caresses/classifyGesture", 1000, &C_interaction::classCallback, this);
+}
 
 
 /*
@@ -28,7 +36,7 @@ ros::Subscriber subLoneliness;
     else:
       gesture_str = "No_Gesture"
 **/
-void classCallback(const std_msgs::String &pattern)
+void C_interaction::classCallback(const std_msgs::String &pattern)
 {
   /* to approach miro, caress him on body
      to send away miro, pat on head (caresses on head would be difficult to detect)
@@ -44,14 +52,14 @@ void classCallback(const std_msgs::String &pattern)
 
 }
 
-void subLonelinessCallback(const std_msgs::Int32& msg)
+void C_interaction::subLonelinessCallback(const std_msgs::Int32& msg)
 {
     loneliness = msg.data;
     subLoneliness.shutdown();
     notRead = false;
 }
 
-void showHappiness(ros::Publisher pubPlat){
+void C_interaction::showHappiness(ros::Publisher pubPlat){
   /** Kinematic and cosmetic things to show miro happy */
   look_caresses_pkg::platform_control plat_msgs_happy;
 
@@ -98,25 +106,16 @@ void showHappiness(ros::Publisher pubPlat){
 }
 
 
-int main(int argc, char **argv)
+int C_interaction::main()
 {
   bool miroHappy = false;
 
-  ros::init(argc, argv, "A_Awakening");
-  ros::NodeHandle nh;
-
-  ros::Publisher pubPlat = nh.advertise<look_caresses_pkg::platform_control>
-      ("/miro/rob01/platform/control", 1000);
-
-  /** read loneliness value **/
-  subLoneliness = nh.subscribe("miro/look4caresses/loneliness", 1000, subLonelinessCallback);
   while(ros::ok() && notRead){
     ros::spinOnce();
   }
   ROS_INFO("[C] I read Loneliness: [%d]", loneliness);
 
   /** INTERACTION PHASE **/
-  ros::Subscriber subClass = nh.subscribe("/miro/look4caresses/classifyGesture", 1000, classCallback);
   srand(time(NULL));
 
   ros::Rate loop_rate(2); //0.5 s
@@ -147,15 +146,8 @@ int main(int argc, char **argv)
 
   }
 
-
-
   /** Miro back to sleep **/
   // Go back few centimeters?
-
-
-
-
-
   return 0;
 
 }

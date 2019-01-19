@@ -1,11 +1,7 @@
-#include <ros/ros.h>
-#include "std_msgs/Int32.h"
 #include "std_msgs/String.h"
 #include <cstdlib>
 #include <iostream>
 #include "look_caresses_pkg/platform_control.h"
-#include "look_caresses_pkg/platform_sensors.h"
-
 #include "../header/A_awakening.h"
 
 A_awakening::A_awakening(int argc, char **argv){
@@ -80,7 +76,7 @@ int A_awakening::main()
             loneliness++;
         }
         pubPlat.publish(plat_msgs_sleeping);
-        ros::spinOnce();
+        ros::spinOnce(); // need to receive touchedCallback
         loop_rate.sleep();
     }
 
@@ -120,7 +116,7 @@ int A_awakening::main()
       //plat_msgs_awake.sound_index_P1 = rand()%32; // mammal alien sound
       plat_msgs_awake.sound_index_P2 = rand()%20; //pirate sound
       pubPlat.publish(plat_msgs_awake);
-      ros::spinOnce();
+      //ros::spinOnce();
       loop_rate2.sleep();
     }
 

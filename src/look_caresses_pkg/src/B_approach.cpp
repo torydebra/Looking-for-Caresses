@@ -1,18 +1,21 @@
-#include "ros/ros.h"
-#include "look_caresses_pkg/platform_sensors.h"
 #include "look_caresses_pkg/platform_control.h"
 #include <iostream>
 #include <string>
 #include <numeric>
-#include <boost/circular_buffer.hpp>
+#include "../header/b_approach.h"
 
-#define averageNum 20 // number of values to consider in the average for the sonar range
-ros::Publisher pub;
-ros::Subscriber sub;
-boost::circular_buffer<float> sonarMsgs(averageNum); // to have more than 1 measure from the sonar
+B_approach::B_approach(int argc, char **argv){
+  ros::init(argc, argv, "B_approach");
+  ros::NodeHandle nh;
+  sonarMsgs(averageNum);
+  counter = 0;
 
+  pubPlat = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control", 1000);
+  pubVel = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control",100);
+  subRange = nh.subscribe("/miro/rob01/sensors/sonar_range", 1000, &B_approach::sonarCallback, this);
+}
 
-void sonarCallback(const sensor_msgs::Range &sensor_range)
+void B_approach::sonarCallback(const sensor_msgs::Range &sensor_range)
 {
     look_caresses_pkg::platform_control msg;
     sonarMsgs.push_front(sensor_range.range);
@@ -31,37 +34,36 @@ void sonarCallback(const sensor_msgs::Range &sensor_range)
       else { // miro must not move
         msg.body_vel.linear.x = 0;
         msg.body_vel.angular.z = 0;
+        counter ++;
       }
     } else { // miro must not move
       msg.body_vel.linear.x = 0;
       msg.body_vel.angular.z = 0;
     }
-    pub.publish(msg);
+    pubVel.publish(msg);
 }
 
-int main(int argc, char **argv)
+int B_approach::main()
 {
-    ros::init(argc, argv, "B_approach");
-    ros::NodeHandle nh;
-
     // Publish the kinematic of the head to position the head up for detecting sonar range
     ros::Rate loop_rate(1);
-    ros::Publisher pubPlat = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control", 1000);
-    look_caresses_pkg::platform_control plat_msgs_sleeping;
-    float body_config_sleeping[4] = {0.0, 0.4, 0, -0.1};
-    float body_config_speed_sleeping[4] = {0.0, -1.0, -1.0, -1.0};
+    look_caresses_pkg::platform_control plat_msgs_headup;
+    float body_config_headup[4] = {0.0, 0.4, 0, -0.1};
+    float body_config_speed_headup[4] = {0.0, -1.0, -1.0, -1.0};
     for (int i =0; i<4; i++){
-      plat_msgs_sleeping.body_config[i] = body_config_sleeping[i];
-      plat_msgs_sleeping.body_config_speed[i] = body_config_speed_sleeping[i];
+      plat_msgs_headup.body_config[i] = body_config_headup[i];
+      plat_msgs_headup.body_config_speed[i] = body_config_speed_headup[i];
     }
     loop_rate.sleep();
-    pubPlat.publish(plat_msgs_sleeping);
-    ros::spinOnce();
+    pubPlat.publish(plat_msgs_headup);
 
-    pub = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control",100);
-    sub = nh.subscribe("/miro/rob01/sensors/sonar_range", 1000, sonarCallback);
+    ros::Rate loop_rate2(2);
+    while (ros::ok() && counter<6){
+      ros::spinOnce();
+      loop_rate2.sleep();
+    }
 
-    ros::spin();
+    //ros::spin();
 
     return 0;
 }

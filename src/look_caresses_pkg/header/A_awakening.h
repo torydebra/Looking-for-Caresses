@@ -1,6 +1,9 @@
-#include "look_caresses_pkg/platform_control.h"
+#ifndef A_AWAKENING_H
+#define A_AWAKENING_H
+
 #include "look_caresses_pkg/platform_sensors.h"
 #include "std_msgs/Int32.h"
+#include <ros/ros.h>
 
 class A_awakening {
 private:
@@ -19,3 +22,5 @@ public:
   A_awakening (int argc, char **argv);
   int main();
 };
+
+#endif // A_AWAKENING_H
