@@ -6,25 +6,56 @@
 #include "look_caresses_pkg/platform_control.h"
 #include "look_caresses_pkg/platform_sensors.h"
 
-bool notRead = true;
-bool touched = false;
-int loneliness; //from 0 to 100
-ros::Subscriber subLoneliness;
-ros::Subscriber subTouched;
+
+class A_awakening {
+private:
+  bool notRead;
+  bool touched;
+  int loneliness; //from 0 to 100
+  ros::Subscriber subLoneliness;
+  ros::Subscriber subTouched;
+  ros::NodeHandle nh;
+  ros::Publisher pubPlat;
+  ros::Publisher pubLoneliness;
+
+  void subTouchCallback(const look_caresses_pkg::platform_sensors &msg);
+  void subLonelinessCallback(const std_msgs::Int32& msg);
+
+public:
+  A_awakening (int argc, char **argv);
+  int main();
+};
+
+A_awakening::A_awakening(int argc, char **argv){
+  notRead = true;
+  touched = false;
+  ros::init(argc, argv, "A_Awakening");
+
+  //Subscribed topics
+  subLoneliness = nh.subscribe("miro/look4caresses/loneliness", 1000, &A_awakening::subLonelinessCallback, this);
+  // sub to see if miro is touched while sleeping
+  subTouched = nh.subscribe("/miro/rob01/platform/sensors", 1000, &A_awakening::subTouchCallback, this);
+
+  //Publish topics
+  pubPlat = nh.advertise<look_caresses_pkg::platform_control>
+      ("/miro/rob01/platform/control", 1000);
+  pubLoneliness = nh.advertise<std_msgs::Int32>("miro/look4caresses/loneliness", 1000);
 
 
-void subTouchCallback(const look_caresses_pkg::platform_sensors &msg){
+}
+
+
+void A_awakening::subTouchCallback(const look_caresses_pkg::platform_sensors &msg){
   for(int i=0; i<4;i++){
     if (msg.touch_head[i] == 1 || msg.touch_body[i] == 1){
       touched = true;
-      subTouched.shutdown();
       return;
     }
   }
 }
 
 
-void subLonelinessCallback(const std_msgs::Int32& msg)
+void A_awakening::subLonelinessCallback(const std_msgs::Int32& msg)
 {
     loneliness =  msg.data;
     subLoneliness.shutdown();
@@ -32,25 +63,20 @@ void subLonelinessCallback(const std_msgs::Int32& msg)
 }
 
 
-int main(int argc, char **argv)
+int A_awakening::main()
 {
-    ros::init(argc, argv, "A_Awakening");
-    ros::NodeHandle n;
 
     /** read loneliness value **/
-    subLoneliness = n.subscribe("miro/look4caresses/loneliness", 1000, subLonelinessCallback);
     while(ros::ok() && notRead){
       ros::spinOnce();
     }
     ROS_INFO("I read Loneliness: [%d]", loneliness);
 
+
     /** SLEEPING PHASE */
-    // sub to see if miro is touched while sleeping
-    subTouched = n.subscribe("/miro/rob01/platform/sensors", 1000, subTouchCallback);
 
     // to publish kinematic and cosmetic thing to make miro look asleep
-    ros::Publisher pubPlat = n.advertise<look_caresses_pkg::platform_control>
-        ("/miro/rob01/platform/control", 1000);
+
     look_caresses_pkg::platform_control plat_msgs_sleeping;
     plat_msgs_sleeping.eyelid_closure = 0.8;
     float body_config_sleeping[4] = {0.0, 1.0, 0, -0.1}; // head down
@@ -59,7 +85,6 @@ int main(int argc, char **argv)
       plat_msgs_sleeping.body_config[i] = body_config_sleeping[i];
       plat_msgs_sleeping.body_config_speed[i] = body_config_speed_sleeping[i];
     }
-
 
     /** Random Awakening **/
     ros::Rate loop_rate(2); // 1 Hz
@@ -83,13 +108,12 @@ int main(int argc, char **argv)
     /** AWAKENING PHASE */
 
     /** update loneliness value **/
-    ros::Publisher pub = n.advertise<std_msgs::Int32>("miro/look4caresses/loneliness", 1000);
 
     ROS_INFO("[A] I am writing Loneliness: %d", loneliness);
 
     std_msgs::Int32 toSend;
     toSend.data = loneliness;
-    pub.publish(toSend);
+    pubLoneliness.publish(toSend);
 
     /** Kinematic and cosmetic things to show miro awake */
     look_caresses_pkg::platform_control plat_msgs_awake;
