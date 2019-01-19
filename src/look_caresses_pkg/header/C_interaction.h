@@ -14,12 +14,13 @@ private:
   int counterSound;
   ros::Subscriber subLoneliness;
   ros::Subscriber subClass;
+  ros::Publisher pubPlat;
 
   void classCallback(const std_msgs::String &pattern);
   void subLonelinessCallback(const std_msgs::Int32& msg);
   void showHappiness(ros::Publisher pubPlat);
 public:
-  C_interaction::C_interaction(int argc, char **argv);
+  C_interaction(int argc, char **argv);
   int main();
 };
 

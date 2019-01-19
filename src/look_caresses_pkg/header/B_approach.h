@@ -13,11 +13,11 @@ private:
   ros::Publisher pubPlat;
   ros::Publisher pubVel;
   ros::Subscriber subRange;
-  boost::circular_buffer<float> sonarMsgs(int num); // to have more than 1 measure from the sonar
+  boost::circular_buffer<float> sonarMsgs; // to have more than 1 measure from the sonar
 
   void sonarCallback(const sensor_msgs::Range &sensor_range);
 public:
-  B_approach::B_approach (int argc, char **argv);
+  B_approach (int argc, char **argv);
   int main ();
 };
 

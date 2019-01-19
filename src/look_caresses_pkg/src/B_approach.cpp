@@ -2,12 +2,12 @@
 #include <iostream>
 #include <string>
 #include <numeric>
-#include "../header/b_approach.h"
+#include "../header/B_approach.h"
 
 B_approach::B_approach(int argc, char **argv){
   ros::init(argc, argv, "B_approach");
   ros::NodeHandle nh;
-  sonarMsgs(averageNum);
+  sonarMsgs = boost::circular_buffer<float>(averageNum);
   counter = 0;
 
   pubPlat = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control", 1000);

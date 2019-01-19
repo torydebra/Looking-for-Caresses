@@ -221,21 +221,15 @@ include_directories(
 
 add_executable(Coordinator src/Coordinator.cpp)
 add_library(A_awakening src/A_awakening.cpp)
+add_library(Aa_faceDetection src/Aa_faceDetection.cpp)
+add_library(B_approach src/B_approach.cpp)
+add_library(C_interaction src/C_interaction.cpp)
 target_link_libraries(Coordinator  ${catkin_LIBRARIES})
 target_link_libraries(Coordinator A_awakening)
+target_link_libraries(Coordinator Aa_faceDetection)
+target_link_libraries(Coordinator B_approach)
+target_link_libraries(Coordinator C_interaction)
 add_dependencies(Coordinator look_caresses_pkg_generate_messages_cpp)
-
-add_executable(Aa_faceDetection src/Aa_faceDetection.cpp)
-target_link_libraries(Aa_faceDetection  ${catkin_LIBRARIES})
-add_dependencies(Aa_faceDetection look_caresses_pkg_generate_messages_cpp)
-
-add_executable(B_approach src/B_approach.cpp)
-target_link_libraries(B_approach ${catkin_LIBRARIES})
-add_dependencies(B_approach look_caresses_pkg_generate_messages_cpp)
-
-add_executable(C_interaction src/C_interaction.cpp)
-target_link_libraries(C_interaction ${catkin_LIBRARIES})
-add_dependencies(C_interaction look_caresses_pkg_generate_messages_cpp)
 
 catkin_install_python(PROGRAMS src/Data_input.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

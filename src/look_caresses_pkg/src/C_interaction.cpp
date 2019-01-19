@@ -1,6 +1,6 @@
 #include "look_caresses_pkg/platform_control.h"
 #include <string>
-#include "../header/c_interaction.h"
+#include "../header/C_interaction.h"
 
 C_interaction::C_interaction(int argc, char **argv) {
   notRead = true;
@@ -8,10 +8,10 @@ C_interaction::C_interaction(int argc, char **argv) {
   negativeApproach = 0;
   counterSound = 0;
 
-  ros::init(argc, argv, "A_Awakening");
+  ros::init(argc, argv, "C_interaction");
   ros::NodeHandle nh;
 
-  ros::Publisher pubPlat = nh.advertise<look_caresses_pkg::platform_control>
+  pubPlat = nh.advertise<look_caresses_pkg::platform_control>
       ("/miro/rob01/platform/control", 1000);
 
   /** read loneliness value **/

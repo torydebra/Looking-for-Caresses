@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 #include "look_caresses_pkg/platform_control.h"
-#include "../header/Aa_facedetection.h"
+#include "../header/Aa_faceDetection.h"
 
 Aa_faceDetection::Aa_faceDetection(int argc, char **argv){
   detectedLeft = false;
@@ -9,7 +9,7 @@ Aa_faceDetection::Aa_faceDetection(int argc, char **argv){
   ros::NodeHandle nh;
   pubVelocity = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control",100);
   subImageDetectRight = nh.subscribe("/right/face_detection/faces", 1000, &Aa_faceDetection::subImgDetectCallbackRight, this);
-  subImageDetectLeft = nh.subscribe("/left/face_detection/faces", 1000, &Aa_faceDetection::subImageDetectLeft, this);
+  subImageDetectLeft = nh.subscribe("/left/face_detection/faces", 1000, &Aa_faceDetection::subImgDetectCallbackLeft, this);
 
 }
 

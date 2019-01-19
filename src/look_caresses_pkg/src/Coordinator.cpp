@@ -11,7 +11,9 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "Coordinator");
   ros::NodeHandle nh;
   ros::Publisher pubLoneliness = nh.advertise<std_msgs::Int32>("miro/look4caresses/loneliness", 1000);
-  pubLoneliness.publish(50); // initialize loneliness to 50
+  std_msgs::Int32 msg;
+  msg.data = 50;
+  pubLoneliness.publish(msg); // initialize loneliness to 50
   ROS_INFO("[COORD] Published initial value of loneliness = 50");
   A_awakening a_awakening(argc, argv);
   Aa_faceDetection aa_faceDetection(argc, argv);
