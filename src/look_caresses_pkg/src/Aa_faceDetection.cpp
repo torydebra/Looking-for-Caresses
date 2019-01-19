@@ -1,13 +1,19 @@
-#include <ros/ros.h>
 #include <cstdlib>
 #include <iostream>
-#include "opencv_apps/FaceArrayStamped.h"
 #include "look_caresses_pkg/platform_control.h"
+#include "../header/Aa_facedetection.h"
 
-ros::Publisher pubVelocity;
-bool detectedLeft = false;
+Aa_faceDetection::Aa_faceDetection(int argc, char **argv){
+  detectedLeft = false;
+  ros::init(argc, argv, "A_faceDetection");
+  ros::NodeHandle nh;
+  pubVelocity = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control",100);
+  subImageDetectRight = nh.subscribe("/right/face_detection/faces", 1000, &Aa_faceDetection::subImgDetectCallbackRight, this);
+  subImageDetectLeft = nh.subscribe("/left/face_detection/faces", 1000, &Aa_faceDetection::subImageDetectLeft, this);
 
-void subImgDetectCallbackRight(const opencv_apps::FaceArrayStamped &msgFacesRight){
+}
+
+void Aa_faceDetection::subImgDetectCallbackRight(const opencv_apps::FaceArrayStamped &msgFacesRight){
 
   look_caresses_pkg::platform_control msgVel;
 
@@ -31,7 +37,7 @@ void subImgDetectCallbackRight(const opencv_apps::FaceArrayStamped &msgFacesRigh
   pubVelocity.publish(msgVel);
 }
 
-void subImgDetectCallbackLeft(const opencv_apps::FaceArrayStamped &msgFacesLeft){
+void Aa_faceDetection::subImgDetectCallbackLeft(const opencv_apps::FaceArrayStamped &msgFacesLeft){
 
   if (msgFacesLeft.faces.empty()) {
     detectedLeft = false;
@@ -41,15 +47,8 @@ void subImgDetectCallbackLeft(const opencv_apps::FaceArrayStamped &msgFacesLeft)
   }
 }
 
-int main(int argc, char **argv)
+int Aa_faceDetection::main()
 {
-    ros::init(argc, argv, "A_faceDetection");
-    ros::NodeHandle n;
-
-    pubVelocity = n.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control",100);
-    ros::Subscriber subImageDetectRight = n.subscribe("/right/face_detection/faces", 1000, subImgDetectCallbackRight);
-    ros::Subscriber subImageDetectLeft = n.subscribe("/left/face_detection/faces", 1000, subImgDetectCallbackLeft);
-
     ros::spin();
 
     return 0;
