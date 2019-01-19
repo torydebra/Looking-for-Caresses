@@ -219,6 +219,12 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
+add_executable(Coordinator src/Coordinator.cpp)
+add_library(A_awakening src/A_awakening.cpp)
+target_link_libraries(Coordinator  ${catkin_LIBRARIES})
+target_link_libraries(Coordinator A_awakening)
+add_dependencies(Coordinator look_caresses_pkg_generate_messages_cpp)
+
 add_executable(Aa_faceDetection src/Aa_faceDetection.cpp)
 target_link_libraries(Aa_faceDetection  ${catkin_LIBRARIES})
 add_dependencies(Aa_faceDetection look_caresses_pkg_generate_messages_cpp)

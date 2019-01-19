@@ -6,31 +6,13 @@
 #include "look_caresses_pkg/platform_control.h"
 #include "look_caresses_pkg/platform_sensors.h"
 
-
-class A_awakening {
-private:
-  bool notRead;
-  bool touched;
-  int loneliness; //from 0 to 100
-  ros::Subscriber subLoneliness;
-  ros::Subscriber subTouched;
-  ros::NodeHandle nh;
-  ros::Publisher pubPlat;
-  ros::Publisher pubLoneliness;
-
-  void subTouchCallback(const look_caresses_pkg::platform_sensors &msg);
-  void subLonelinessCallback(const std_msgs::Int32& msg);
-
-public:
-  A_awakening (int argc, char **argv);
-  int main();
-};
+#include "../header/A_awakening.h"
 
 A_awakening::A_awakening(int argc, char **argv){
   notRead = true;
   touched = false;
   ros::init(argc, argv, "A_Awakening");
-
+  ros::NodeHandle nh;
   //Subscribed topics
   subLoneliness = nh.subscribe("miro/look4caresses/loneliness", 1000, &A_awakening::subLonelinessCallback, this);
   // sub to see if miro is touched while sleeping
@@ -40,7 +22,6 @@ A_awakening::A_awakening(int argc, char **argv){
   pubPlat = nh.advertise<look_caresses_pkg::platform_control>
       ("/miro/rob01/platform/control", 1000);
   pubLoneliness = nh.advertise<std_msgs::Int32>("miro/look4caresses/loneliness", 1000);
-
 
 }
 
