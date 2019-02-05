@@ -12,6 +12,7 @@ private:
   int negativeApproach;
   int loneliness;
   int counterSound;
+  ros::NodeHandle nh;
   ros::Subscriber subLoneliness;
   ros::Subscriber subClass;
   ros::Publisher pubPlat;
@@ -20,6 +21,9 @@ private:
   void classCallback(const std_msgs::String &pattern);
   void subLonelinessCallback(const std_msgs::Int32& msg);
   void showHappiness(ros::Publisher pubPlat);
+  void subTopics();
+  void unsubTopics();
+
 public:
   C_interaction(int argc, char **argv);
   int main();
