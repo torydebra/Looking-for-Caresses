@@ -220,6 +220,10 @@ include_directories(
 # catkin_add_nosetests(test)
 
 add_executable(Coordinator src/Coordinator.cpp)
+#add_executable(A_awakening src/A_awakening.cpp)
+#add_executable(Aa_faceDetection src/Aa_faceDetection.cpp)
+#add_executable(B_approach src/B_approach.cpp)
+#add_executable(C_interaction src/C_interaction.cpp)
 add_library(A_awakening src/A_awakening.cpp)
 add_library(Aa_faceDetection src/Aa_faceDetection.cpp)
 add_library(B_approach src/B_approach.cpp)

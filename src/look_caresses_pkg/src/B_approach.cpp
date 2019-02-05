@@ -25,7 +25,7 @@ void B_approach::sonarCallback(const sensor_msgs::Range &sensor_range)
       // average between more than 1 value to avoid the errors of the sonar (sometimes returns zeros)
       float sum = std::accumulate(sonarMsgs.begin(), sonarMsgs.end(), 0.0); //0 init the sum to 0
       float average = sum/averageNum;
-      ROS_INFO("Sonar Range average: %f", average);
+      ROS_INFO("[NODE-B] Sonar Range average: %f", average);
 
       if (average > 0.15) { // in meters
         msg.body_vel.linear.x = 30; // good choiche for the linear velocity

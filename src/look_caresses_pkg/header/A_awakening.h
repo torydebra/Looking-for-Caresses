@@ -14,9 +14,12 @@ private:
   ros::Subscriber subTouched;
   ros::Publisher pubPlat;
   ros::Publisher pubLoneliness;
+  ros::NodeHandle nh;
 
   void subTouchCallback(const look_caresses_pkg::platform_sensors &msg);
   void subLonelinessCallback(const std_msgs::Int32& msg);
+  void subTopics();
+  void unsubTopics();
 
 public:
   A_awakening (int argc, char **argv);

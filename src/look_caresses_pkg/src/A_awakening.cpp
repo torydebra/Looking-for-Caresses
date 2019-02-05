@@ -8,16 +8,14 @@ A_awakening::A_awakening(int argc, char **argv){
   notRead = true;
   touched = false;
   ros::init(argc, argv, "A_Awakening");
-  ros::NodeHandle nh;
-  //Subscribed topics
-  subLoneliness = nh.subscribe("miro/look4caresses/loneliness", 1000, &A_awakening::subLonelinessCallback, this);
-  // sub to see if miro is touched while sleeping
-  subTouched = nh.subscribe("/miro/rob01/platform/sensors", 1000, &A_awakening::subTouchCallback, this);
+
+
 
   //Publish topics
   pubPlat = nh.advertise<look_caresses_pkg::platform_control>
       ("/miro/rob01/platform/control", 1000);
   pubLoneliness = nh.advertise<std_msgs::Int32>("miro/look4caresses/loneliness", 1000);
+
 
 }
 
@@ -42,6 +40,8 @@ void A_awakening::subLonelinessCallback(const std_msgs::Int32& msg)
 
 int A_awakening::main()
 {
+
+    subTopics();
 
     /** read loneliness value **/
     while(ros::ok() && notRead){
@@ -120,5 +120,22 @@ int A_awakening::main()
       loop_rate2.sleep();
     }
 
+    unsubTopics();
+
     return 0;
+}
+
+void A_awakening::subTopics(){
+
+  //Subscribed topics
+  subLoneliness = nh.subscribe("miro/look4caresses/loneliness", 1000, &A_awakening::subLonelinessCallback, this);
+  // sub to see if miro is touched while sleeping
+  subTouched = nh.subscribe("/miro/rob01/platform/sensors", 1000, &A_awakening::subTouchCallback, this);
+
+
+}
+
+void A_awakening::unsubTopics(){
+  subLoneliness.shutdown();
+  subTouched.shutdown();
 }

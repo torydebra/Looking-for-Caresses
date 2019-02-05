@@ -21,16 +21,15 @@ int main(int argc, char **argv)
   C_interaction c_interaction(argc, argv);
 
   while (ros::ok()){
-    A_awakening a_awakening(argc, argv);
     ROS_INFO("[COORD] node A started");
     a_awakening.main();
     ROS_INFO("[COORD] node A finished, Starting node Aa");
-    aa_faceDetection.main();
-    ROS_INFO("[COORD] node Aa finished, Starting node B");
-    b_approach.main();
-    ROS_INFO("[COORD] node B finished, Starting node C");
-    c_interaction.main();
-    ROS_INFO("[COORD] node C finished, Starting node A");
+    //aa_faceDetection.main();
+    //ROS_INFO("[COORD] node Aa finished, Starting node B");
+   // b_approach.main();
+    //ROS_INFO("[COORD] node B finished, Starting node C");
+    //c_interaction.main();
+    //ROS_INFO("[COORD] node C finished, Starting node A");
   }
 
   ROS_INFO("[COORD] Shutting down");

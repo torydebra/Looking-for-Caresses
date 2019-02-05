@@ -1,5 +1,10 @@
 # Looking-for-Caresses
 
+
+# inizialize miro come blablabal
+https://github.com/EmaroLab/MIRO/blob/master/miro_setup_quick/MIRO_setup
+
+
 ### TO install :
 #### for face_detection
 opencv 3.4 https://docs.opencv.org/3.3.0/d7/d9f/tutorial_linux_install.html
