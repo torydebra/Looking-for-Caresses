@@ -42,6 +42,8 @@ void B_approach::sonarCallback(const sensor_msgs::Range &sensor_range)
 int B_approach::main()
 {
     counter = 0;
+    sonarMsgs.erase(sonarMsgs.begin(), sonarMsgs.end());
+
     ROS_INFO("[B] Started");
 
     subTopics();

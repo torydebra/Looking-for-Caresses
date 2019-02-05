@@ -62,7 +62,7 @@ int Aa_faceDetection::main()
     subTopics();
 
     ros::Rate loop_rate(10); //10 hz
-    while (detectedFaceConsec <= 30){ //detect face and keep it in focus for 30*10hz = 3 seconds
+    while (detectedFaceConsec <= 15){ //detect face and keep it in focus for 15*10hz = 1.5 seconds
       ros::spinOnce();
       loop_rate.sleep();
     }

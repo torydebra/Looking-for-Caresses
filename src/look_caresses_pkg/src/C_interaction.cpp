@@ -93,6 +93,11 @@ void C_interaction::showHappiness(int loneliness){
 
 int C_interaction::main(int loneliness)
 {
+  notRead = true;
+  positiveApproach = 0;
+  negativeApproach = 0;
+  counterSound = 0;
+
   ROS_INFO("[C] Started");
 
   bool miroHappy = false;
@@ -135,7 +140,14 @@ int C_interaction::main(int loneliness)
 
 
   /** Miro back to sleep **/
-  // Go back few centimeters?
+  look_caresses_pkg::platform_control msg;
+  msg.body_vel.linear.x = -30; // good choiche for the linear velocity
+  msg.body_vel.angular.z = -0.05; // because miro turns unwanted
+  ros::Rate loop_rate2(1);
+  for (int i = 0; i<4; i++){
+     pubPlat.publish(msg);
+     loop_rate2.sleep();
+  }
 
   ROS_INFO("[C] Finished");
   return loneliness;

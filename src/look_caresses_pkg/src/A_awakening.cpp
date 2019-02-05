@@ -24,6 +24,10 @@ void A_awakening::subTouchCallback(const look_caresses_pkg::platform_sensors &ms
 
 int A_awakening::main(int loneliness)
 {
+
+    notRead = true;
+    touched = false;
+
     ROS_INFO("[A] Started");
     subTopics();
 

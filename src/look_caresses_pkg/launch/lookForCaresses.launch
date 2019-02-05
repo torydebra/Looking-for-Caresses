@@ -1,0 +1,8 @@
+<launch>
+
+	<node pkg="look_caresses_pkg" type="Coordinator" name="Coordinator" />
+	
+	<include ns="right" file="$(find look_caresses_pkg)/launch/face_detect_double.launch"/>
+	</include>
+
+</launch>
