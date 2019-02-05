@@ -3,12 +3,13 @@
 
 #include <ros/ros.h>
 #include "opencv_apps/FaceArrayStamped.h"
+#include "look_caresses_pkg/platform_control.h"
 
 class Aa_faceDetection {
 private:
   bool detectedLeft;
   int detectedFaceConsec;
-  ros::Publisher pubVelocity;
+  ros::Publisher pubPlat;
   ros::Subscriber subImageDetectRight;
   ros::Subscriber subImageDetectLeft;
   ros::NodeHandle nh;
@@ -19,7 +20,7 @@ private:
   void unsubTopics();
 
 public:
-  Aa_faceDetection (int argc, char **argv);
+  Aa_faceDetection (ros::NodeHandle nh, ros::Publisher pubPlat);
   int main();
 };
 
