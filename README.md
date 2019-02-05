@@ -2,7 +2,7 @@
 Project for Social Robotics 2018/19 course of Robotics Engineering.
 ## Description
 MiRo is a small pet-like robot intended to be a companion. In this project, MiRo behave as companion, standing on the desk while the user is working (for example, at pc). 
-* **Task A: Awakening** Randomly, MiRo awakes to look for caresses from the user. The more the time pass, the more MiRo feels lonely so the probability that he wakes up increase. Also, if the user touch MiRo, he awakes immediately.
+* **Task A: Awakening** Randomly, MiRo awakes to look for caresses from the user. The more the time pass, the more MiRo feels lonely so the probability that it wakes up increase. Also, if the user touches MiRo, it awakes immediately.
 * **Task Aa: Face detection**
 Awakened MiRo looks for the user face (Aa face detection task), turning on itself until the face is detected with both cameras (so, the face is in front of the robot).
 * **Task B: Approaching** 
