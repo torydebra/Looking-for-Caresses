@@ -1,20 +1,16 @@
-#include "look_caresses_pkg/platform_control.h"
 #include <string>
 #include "../header/C_interaction.h"
 
-C_interaction::C_interaction(int argc, char **argv) {
+C_interaction::C_interaction(ros::NodeHandle nh, ros::Publisher pubPlat) {
   notRead = true;
   positiveApproach = 0;
   negativeApproach = 0;
   counterSound = 0;
 
-  ros::init(argc, argv, "C_interaction");
-
-  pubPlat = nh.advertise<look_caresses_pkg::platform_control>
-      ("/miro/rob01/platform/control", 1000);
+  this->nh = nh;
+  this->pubPlat = pubPlat;
 
 }
-
 
 /*
      if index == 0:
@@ -48,14 +44,8 @@ void C_interaction::classCallback(const std_msgs::String &pattern)
 
 }
 
-void C_interaction::subLonelinessCallback(const std_msgs::Int32& msg)
-{
-    loneliness = msg.data;
-    subLoneliness.shutdown();
-    notRead = false;
-}
 
-void C_interaction::showHappiness(ros::Publisher pubPlat){
+void C_interaction::showHappiness(int loneliness){
   /** Kinematic and cosmetic things to show miro happy */
   look_caresses_pkg::platform_control plat_msgs_happy;
 
@@ -98,19 +88,17 @@ void C_interaction::showHappiness(ros::Publisher pubPlat){
   }
 
   pubPlat.publish(plat_msgs_happy);
-
 }
 
 
-int C_interaction::main()
+int C_interaction::main(int loneliness)
 {
+  ROS_INFO("[C] Started");
+
   bool miroHappy = false;
   subTopics();
 
-  while(ros::ok() && notRead){
-    ros::spinOnce();
-  }
-  ROS_INFO("[C] I read Loneliness: [%d]", loneliness);
+  ROS_INFO("[C] I have a Loneliness value of: [%d]", loneliness);
 
   /** INTERACTION PHASE **/
   srand(time(NULL));
@@ -123,7 +111,7 @@ int C_interaction::main()
     if (positiveApproach > 10){
       loneliness--;
       ROS_INFO("[C] I am becoming happier :) (loneliness:%d)", loneliness);
-      showHappiness(pubPlat);
+      showHappiness(loneliness);
 
       positiveApproach = 0; //reset positive counter
     }
@@ -145,20 +133,21 @@ int C_interaction::main()
 
   unsubTopics();
 
+
   /** Miro back to sleep **/
   // Go back few centimeters?
-  return 0;
+
+  ROS_INFO("[C] Finished");
+  return loneliness;
 
 }
 
 void C_interaction::subTopics(){
   /** read loneliness value **/
-  subLoneliness = nh.subscribe("miro/look4caresses/loneliness", 1000, &C_interaction::subLonelinessCallback, this);
   subClass = nh.subscribe("/miro/look4caresses/classifyGesture", 1000, &C_interaction::classCallback, this);
 
 }
 
 void C_interaction::unsubTopics(){
-  subLoneliness.shutdown();
   subClass.shutdown();
 }

@@ -3,6 +3,7 @@
 #include "../header/Aa_faceDetection.h"
 #include "../header/B_approach.h"
 #include "../header/C_interaction.h"
+#include "look_caresses_pkg/platform_control.h"
 
 
 int main(int argc, char **argv)
@@ -10,26 +11,28 @@ int main(int argc, char **argv)
   ROS_INFO("[COORD] Started");
   ros::init(argc, argv, "Coordinator");
   ros::NodeHandle nh;
-  ros::Publisher pubLoneliness = nh.advertise<std_msgs::Int32>("miro/look4caresses/loneliness", 1000);
-  std_msgs::Int32 msg;
-  msg.data = 50;
-  pubLoneliness.publish(msg); // initialize loneliness to 50
+  ros::Publisher pubPlat = nh.advertise<look_caresses_pkg::platform_control>
+      ("/miro/rob01/platform/control", 1000);
+
+  int loneliness = 10;   // initialize loneliness to 50
+
   ROS_INFO("[COORD] Published initial value of loneliness = 50");
-  A_awakening a_awakening(argc, argv);
-  Aa_faceDetection aa_faceDetection(argc, argv);
-  B_approach b_approach(argc, argv);
-  C_interaction c_interaction(argc, argv);
+
+  A_awakening a_awakening(nh, pubPlat);
+  Aa_faceDetection aa_faceDetection(nh, pubPlat);
+  B_approach b_approach(nh, pubPlat);
+  C_interaction c_interaction(nh, pubPlat);
 
   while (ros::ok()){
-    ROS_INFO("[COORD] node A started");
-    a_awakening.main();
+    ROS_INFO("[COORD] Starting node A");
+    loneliness = a_awakening.main(loneliness);
     ROS_INFO("[COORD] node A finished, Starting node Aa");
-    //aa_faceDetection.main();
-    //ROS_INFO("[COORD] node Aa finished, Starting node B");
-   // b_approach.main();
-    //ROS_INFO("[COORD] node B finished, Starting node C");
-    //c_interaction.main();
-    //ROS_INFO("[COORD] node C finished, Starting node A");
+    aa_faceDetection.main();
+    ROS_INFO("[COORD] node Aa finished, Starting node B");
+    b_approach.main();
+    ROS_INFO("[COORD] node B finished, Starting node C");
+    loneliness = c_interaction.main(loneliness);
+    ROS_INFO("[COORD] node C finished, Starting node A");
   }
 
   ROS_INFO("[COORD] Shutting down");

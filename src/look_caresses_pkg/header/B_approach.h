@@ -4,6 +4,7 @@
 #include <boost/circular_buffer.hpp>
 #include "ros/ros.h"
 #include "look_caresses_pkg/platform_sensors.h"
+#include "look_caresses_pkg/platform_control.h"
 
 #define averageNum 20 // number of values to consider in the average for the sonar range
 
@@ -12,7 +13,6 @@ private:
   int counter;
   ros::NodeHandle nh;
   ros::Publisher pubPlat;
-  ros::Publisher pubVel;
   ros::Subscriber subRange;
   boost::circular_buffer<float> sonarMsgs; // to have more than 1 measure from the sonar
 
@@ -21,7 +21,7 @@ private:
   void subTopics();
 
 public:
-  B_approach (int argc, char **argv);
+  B_approach (ros::NodeHandle nh, ros::Publisher pubPlat);
   int main ();
 };
 

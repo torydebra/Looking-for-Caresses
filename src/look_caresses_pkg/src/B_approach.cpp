@@ -1,17 +1,14 @@
-#include "look_caresses_pkg/platform_control.h"
 #include <iostream>
 #include <string>
 #include <numeric>
 #include "../header/B_approach.h"
 
-B_approach::B_approach(int argc, char **argv){
-  ros::init(argc, argv, "B_approach");
+B_approach::B_approach(ros::NodeHandle nh, ros::Publisher pubPlat){
 
   sonarMsgs = boost::circular_buffer<float>(averageNum);
   counter = 0;
-
-  pubPlat = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control", 1000);
-  pubVel = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control",100);
+  this->nh = nh;
+  this->pubPlat = pubPlat;
 }
 
 void B_approach::sonarCallback(const sensor_msgs::Range &sensor_range)
@@ -24,7 +21,7 @@ void B_approach::sonarCallback(const sensor_msgs::Range &sensor_range)
       // average between more than 1 value to avoid the errors of the sonar (sometimes returns zeros)
       float sum = std::accumulate(sonarMsgs.begin(), sonarMsgs.end(), 0.0); //0 init the sum to 0
       float average = sum/averageNum;
-      ROS_INFO("[NODE-B] Sonar Range average: %f", average);
+      ROS_INFO("[B] Sonar Range average: %f", average);
 
       if (average > 0.15) { // in meters
         msg.body_vel.linear.x = 30; // good choiche for the linear velocity
@@ -39,16 +36,17 @@ void B_approach::sonarCallback(const sensor_msgs::Range &sensor_range)
       msg.body_vel.linear.x = 0;
       msg.body_vel.angular.z = 0;
     }
-    pubVel.publish(msg);
+    pubPlat.publish(msg);
 }
 
 int B_approach::main()
 {
+    counter = 0;
+    ROS_INFO("[B] Started");
 
     subTopics();
 
     // Publish the kinematic of the head to position the head up for detecting sonar range
-    ros::Rate loop_rate(1);
     look_caresses_pkg::platform_control plat_msgs_headup;
     float body_config_headup[4] = {0.0, 0.4, 0, -0.1};
     float body_config_speed_headup[4] = {0.0, -1.0, -1.0, -1.0};
@@ -56,8 +54,9 @@ int B_approach::main()
       plat_msgs_headup.body_config[i] = body_config_headup[i];
       plat_msgs_headup.body_config_speed[i] = body_config_speed_headup[i];
     }
-    loop_rate.sleep();
-    pubPlat.publish(plat_msgs_headup);
+
+   pubPlat.publish(plat_msgs_headup);
+
 
     ros::Rate loop_rate2(2);
     while (ros::ok() && counter<6){
@@ -67,7 +66,7 @@ int B_approach::main()
 
     //ros::spin();
     unsubTopics();
-
+    ROS_INFO("[B] Finished");
     return 0;
 }
 

@@ -1,13 +1,12 @@
 #include <cstdlib>
 #include <iostream>
-#include "look_caresses_pkg/platform_control.h"
 #include "../header/Aa_faceDetection.h"
 
-Aa_faceDetection::Aa_faceDetection(int argc, char **argv){
+Aa_faceDetection::Aa_faceDetection(ros::NodeHandle nh, ros::Publisher pubPlat){
   detectedLeft = false;
   detectedFaceConsec = 0;
-  ros::init(argc, argv, "A_faceDetection");
-  pubVelocity = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control",100);
+  this->nh = nh;
+  this->pubPlat = pubPlat;
 
 }
 
@@ -40,7 +39,7 @@ void Aa_faceDetection::subImgDetectCallbackRight(const opencv_apps::FaceArraySta
     }
   }
 
-  pubVelocity.publish(msgVel);
+  pubPlat.publish(msgVel);
 }
 
 void Aa_faceDetection::subImgDetectCallbackLeft(const opencv_apps::FaceArrayStamped &msgFacesLeft){
@@ -55,6 +54,11 @@ void Aa_faceDetection::subImgDetectCallbackLeft(const opencv_apps::FaceArrayStam
 
 int Aa_faceDetection::main()
 {
+
+    detectedLeft = false;
+    detectedFaceConsec = 0;
+
+    ROS_INFO("[Aa] Started");
     subTopics();
 
     ros::Rate loop_rate(10); //10 hz
@@ -62,9 +66,13 @@ int Aa_faceDetection::main()
       ros::spinOnce();
       loop_rate.sleep();
     }
+    look_caresses_pkg::platform_control plat_msgs_saw;
+    plat_msgs_saw.sound_index_P2 = rand()%20; //pirate sound
+    pubPlat.publish(plat_msgs_saw);
+    ROS_INFO("[Aa] I saw you consecutevely for 3 seconds");
 
     unsubTopics();
-
+    ROS_INFO("[Aa] Finished");
     return 0;
 }
 
