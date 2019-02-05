@@ -1,8 +1,10 @@
 <launch>
-
-	<node pkg="look_caresses_pkg" type="Coordinator" name="Coordinator" />
 	
 	<include ns="right" file="$(find look_caresses_pkg)/launch/face_detect_double.launch"/>
 	</include>
+
+	<node pkg="look_caresses_pkg" type="Data_input.py" name="Data_input.py" args="robot=rob01" output="screen" launch-prefix="gnome-terminal--command" />
+
+	<node pkg="look_caresses_pkg" type="Coordinator" name="Coordinator" output="screen" launch-prefix="gnome-terminal--command" />
 
 </launch>
