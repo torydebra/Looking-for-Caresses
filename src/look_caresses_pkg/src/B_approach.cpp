@@ -6,13 +6,12 @@
 
 B_approach::B_approach(int argc, char **argv){
   ros::init(argc, argv, "B_approach");
-  ros::NodeHandle nh;
+
   sonarMsgs = boost::circular_buffer<float>(averageNum);
   counter = 0;
 
   pubPlat = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control", 1000);
   pubVel = nh.advertise<look_caresses_pkg::platform_control>("/miro/rob01/platform/control",100);
-  subRange = nh.subscribe("/miro/rob01/sensors/sonar_range", 1000, &B_approach::sonarCallback, this);
 }
 
 void B_approach::sonarCallback(const sensor_msgs::Range &sensor_range)
@@ -45,6 +44,9 @@ void B_approach::sonarCallback(const sensor_msgs::Range &sensor_range)
 
 int B_approach::main()
 {
+
+    subTopics();
+
     // Publish the kinematic of the head to position the head up for detecting sonar range
     ros::Rate loop_rate(1);
     look_caresses_pkg::platform_control plat_msgs_headup;
@@ -64,6 +66,15 @@ int B_approach::main()
     }
 
     //ros::spin();
+    unsubTopics();
 
     return 0;
+}
+
+void B_approach::subTopics(){
+    subRange = nh.subscribe("/miro/rob01/sensors/sonar_range", 1000, &B_approach::sonarCallback, this);
+}
+
+void B_approach::unsubTopics(){
+  subRange.shutdown();
 }

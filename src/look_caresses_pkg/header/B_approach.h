@@ -10,12 +10,16 @@
 class B_approach {
 private:
   int counter;
+  ros::NodeHandle nh;
   ros::Publisher pubPlat;
   ros::Publisher pubVel;
   ros::Subscriber subRange;
   boost::circular_buffer<float> sonarMsgs; // to have more than 1 measure from the sonar
 
   void sonarCallback(const sensor_msgs::Range &sensor_range);
+  void unsubTopics();
+  void subTopics();
+
 public:
   B_approach (int argc, char **argv);
   int main ();

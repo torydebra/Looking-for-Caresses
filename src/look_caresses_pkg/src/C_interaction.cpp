@@ -9,14 +9,10 @@ C_interaction::C_interaction(int argc, char **argv) {
   counterSound = 0;
 
   ros::init(argc, argv, "C_interaction");
-  ros::NodeHandle nh;
 
   pubPlat = nh.advertise<look_caresses_pkg::platform_control>
       ("/miro/rob01/platform/control", 1000);
 
-  /** read loneliness value **/
-  subLoneliness = nh.subscribe("miro/look4caresses/loneliness", 1000, &C_interaction::subLonelinessCallback, this);
-  subClass = nh.subscribe("/miro/look4caresses/classifyGesture", 1000, &C_interaction::classCallback, this);
 }
 
 
@@ -109,6 +105,7 @@ void C_interaction::showHappiness(ros::Publisher pubPlat){
 int C_interaction::main()
 {
   bool miroHappy = false;
+  subTopics();
 
   while(ros::ok() && notRead){
     ros::spinOnce();
@@ -146,9 +143,22 @@ int C_interaction::main()
 
   }
 
+  unsubTopics();
+
   /** Miro back to sleep **/
   // Go back few centimeters?
   return 0;
 
 }
 
+void C_interaction::subTopics(){
+  /** read loneliness value **/
+  subLoneliness = nh.subscribe("miro/look4caresses/loneliness", 1000, &C_interaction::subLonelinessCallback, this);
+  subClass = nh.subscribe("/miro/look4caresses/classifyGesture", 1000, &C_interaction::classCallback, this);
+
+}
+
+void C_interaction::unsubTopics(){
+  subLoneliness.shutdown();
+  subClass.shutdown();
+}

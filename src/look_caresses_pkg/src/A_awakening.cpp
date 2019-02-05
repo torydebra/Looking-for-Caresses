@@ -9,8 +9,6 @@ A_awakening::A_awakening(int argc, char **argv){
   touched = false;
   ros::init(argc, argv, "A_Awakening");
 
-
-
   //Publish topics
   pubPlat = nh.advertise<look_caresses_pkg::platform_control>
       ("/miro/rob01/platform/control", 1000);
