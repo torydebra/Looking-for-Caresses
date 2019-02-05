@@ -15,6 +15,7 @@ private:
   ros::Subscriber subLoneliness;
   ros::Subscriber subClass;
   ros::Publisher pubPlat;
+  ros::NodeHandle nh;
 
   void classCallback(const std_msgs::String &pattern);
   void subLonelinessCallback(const std_msgs::Int32& msg);
