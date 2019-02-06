@@ -36,10 +36,12 @@ t=sf,textfont=sf]{subfig}
 	Like a real pet, MiRo wants attentions from the user. We have implemented this thing in a simply way. A \textbf{loneliness} value ranges from 0 to 100. When it is low, MiRo more probably will wake up, because it feels lonely and he wants caresses. While the interaction is going on, and the user caresses  MiRo, this level goes down. The more the level is low, the more MiRo will probably goes to sleep.
 	
 	\section{The Code}
-	
-	The code is structure as shown in figure kanfuvsvopwr.\\
-	The \textbf{coordinator} is a ROS node responsible to call different classes related to the 4 different phases. 
-	
+	\begin{center}
+		\includegraphics[scale=0.5]{diagram}
+	\end{center}
+	{\small The diagram on the code structure: straight line with numbers resprent execution flow. After step 8 the cycle begin again from step 1. Dotted line represent data exchanged through ros publish-subscribe method.  The communications with the robot (again with ros topics) to receive sensor data and send platform command are not shown}\\
+
+	The \textbf{coordinator} is a ROS node responsible to call different classes related to the 4 different phases. 	
 	\subsection{Task A: Sleeping Phase}
 	In task A, MiRo is sleeping. The task sends through ROS topic commands to shown this. This results in MiRo with close eyelids and head down. While sleeping, \textbf{loneliness} value increases, until MiRo woke up or is is touched by user.
 	\subsection{Task Aa: Face Recognition Phase}
