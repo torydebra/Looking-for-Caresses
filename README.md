@@ -47,10 +47,6 @@ Be sure to have correctly setup your machine and Miro, as described here [MIRO_s
         ```bash
         rosrun look_caresses_pkg Coordinator
         ```
-* OTHERWISE, run a launch which includes all:
-        ```bash
-        roslaunch look_caresses_pkg lookForCaresses.launch
-        ```
 
 ## Credits
 #### Developers
