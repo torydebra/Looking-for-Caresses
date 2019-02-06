@@ -33,11 +33,11 @@ More detail  [here](https://github.com/EmaroLab/Looking-for-Caresses/blob/master
 Be sure to have correctly setup your machine and Miro, as described here [MIRO_setup](https://github.com/EmaroLab/MIRO/blob/master/miro_setup_quick/MIRO_setup)
 * Download folder and compile with ```catkin_make ```
 * Run supports nodes and main singularly, in different terminals:
-   * Face Detection:
+   * Face Detection  
+    This will run two window for the two cameras
         ```bash
          roslaunch look_caresses_pkg face_detect_double.launch
-         ```    
-        This will run two window for the two cameras
+        ```
     * Datainput.py for pattern recognition
         ```bash
         cd [YOUR_PATH]/Looking-for-Caresses/src/look_caresses_pkg/src
