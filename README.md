@@ -52,5 +52,6 @@ Be sure to have correctly setup your machine and Miro, as described here [MIRO_s
 #### Developers
 * [tori](https://github.com/torydebra)
 * [fafux](https://github.com/fafux)
+#### Supports
 * The Pattern recognition node (DataInput.py) is taken from [here](https://github.com/EmaroLab/Miro_SocialRobot/blob/master/README.md)
 * [MIRO website](http://labs.consequentialrobotics.com/)
