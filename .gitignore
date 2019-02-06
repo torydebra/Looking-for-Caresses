@@ -212,3 +212,6 @@ look_caresses_miro.workspace
 *.log
 *.aux
 *.synctex.gz
+
+#autosave
+*.autosave
