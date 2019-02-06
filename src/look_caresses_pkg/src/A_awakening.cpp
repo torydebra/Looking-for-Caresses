@@ -3,6 +3,11 @@
 #include <iostream>
 #include "../header/A_awakening.h"
 
+/** @brief Costructor for phase A task.
+
+    @param nh the ros nodeHandle to subscribe
+    @param pubPlat the Publisher object to publish on topic
+*/
 A_awakening::A_awakening(ros::NodeHandle nh, ros::Publisher pubPlat){
   notRead = true;
   touched = false;
@@ -11,6 +16,10 @@ A_awakening::A_awakening(ros::NodeHandle nh, ros::Publisher pubPlat){
 }
 
 
+/** @brief Callback for touch sensor
+
+    @param msg the message arrived
+*/
 void A_awakening::subTouchCallback(const look_caresses_pkg::platform_sensors &msg){
   for(int i=0; i<4;i++){
     if (msg.touch_head[i] == 1 || msg.touch_body[i] == 1){
@@ -22,6 +31,13 @@ void A_awakening::subTouchCallback(const look_caresses_pkg::platform_sensors &ms
 }
 
 
+/** @brief Phase A: awakening. This fucntion randomly awake MiRo basising on loneliness value.
+    While sleeping, loneliness increases, thus probability of awakening increases. Plus, if MiRo is touched,
+    it wakes up immediately.
+
+    @param loneliness the initial loneliness value
+    @return loneliness value of loneliness updated by the code
+*/
 int A_awakening::main(int loneliness)
 {
 
@@ -103,7 +119,9 @@ int A_awakening::main(int loneliness)
     return loneliness;
 }
 
-
+/**
+ * @brief function to subcribe to specific topics
+ */
 void A_awakening::subTopics(){
 
   //Subscribed topics
@@ -113,6 +131,9 @@ void A_awakening::subTopics(){
 }
 
 
+/**
+ * @brief function to unsubcribe to topics
+ */
 void A_awakening::unsubTopics(){
   subTouched.shutdown();
 }

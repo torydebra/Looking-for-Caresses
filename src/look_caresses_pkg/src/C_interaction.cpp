@@ -1,6 +1,11 @@
-#include <string>
+﻿#include <string>
 #include "../header/C_interaction.h"
 
+/** @brief Costructor for phase C task.
+
+    @param nh the ros nodeHandle to subscribe
+    @param pubPlat the Publisher object to publish on topic
+*/
 C_interaction::C_interaction(ros::NodeHandle nh, ros::Publisher pubPlat) {
   notRead = true;
   positiveApproach = 0;
@@ -12,28 +17,25 @@ C_interaction::C_interaction(ros::NodeHandle nh, ros::Publisher pubPlat) {
 
 }
 
-/*
-     if index == 0:
-       gesture_str = "CarBottomTop"
-      elif index == 1:
-        gesture_str = "FixedBody"
-      elif index == 2:
-        gesture_str = "PatHead"
-      elif index == 3:
-        gesture_str = "FixedHead"
-      elif index == 4:
-        gesture_str = "PatBody"
-      elif index == 5:
-        gesture_str = "CarTopBottom"
-    else:
-      gesture_str = "No_Gesture"
-**/
-void C_interaction::classCallback(const std_msgs::String &pattern)
-{
-  /* to approach miro, caress him on body
+/** @brief Callback for images from right camera
+
+      Gesture Indexes:
+      0: "CarBottomTop"
+      1: "FixedBody"
+      2: "PatHead"
+      3: "FixedHead"
+      4: "PatBody"
+      5: "CarTopBottom"
+      "No_Gesture"
+
+     to approach miro, caress him on body
      to send away miro, pat on head (caresses on head would be difficult to detect)
      patBody not used due to high ratio of false positive (even when body is not touched)
-  */
+
+    @param pattern the touch pattern arrived
+*/
+void C_interaction::classCallback(const std_msgs::String &pattern)
+{
 
   if (!strcmp(pattern.data.c_str() , "CarBottomTop") || !strcmp(pattern.data.c_str() , "CarTopBottom")){
     positiveApproach++;
@@ -45,6 +47,25 @@ void C_interaction::classCallback(const std_msgs::String &pattern)
 }
 
 
+/** @brief function to send command to Miro to show happines while he is being touched.
+ *
+ *   Here we test some of the sound that MiRo can emit.
+ *   P1 sounds are more "mammal" sounds, P2 are a sort of human pirate sound
+ *
+ *   P1 sound indexes:  (Nice sounds from 12 to 17)
+     * 12 rrr rararar like alien
+     * 13 Bad noise
+     * 14 Mrrr nice
+     * 15 MMM...PRRR nice
+     * 16 MMMPRAO good
+     * 17 mmmrrrr good
+     * 18 Bad noise
+     * 19 Bad noise
+     * 20 Bad noise
+     * 31 Bad noise
+
+    @param loneliness the loneliness value needed to show more or less happiness
+*/
 void C_interaction::showHappiness(int loneliness){
   /** Kinematic and cosmetic things to show miro happy */
   look_caresses_pkg::platform_control plat_msgs_happy;
@@ -55,31 +76,12 @@ void C_interaction::showHappiness(int loneliness){
   //plat_msgs_awake.ear_rotate[0] = 0.2;
   //plat_msgs_awake.ear_rotate[1] = 0.2;
 
-
   plat_msgs_happy.eyelid_closure = 0.4;
 
   srand(time(NULL));
 
   if (counterSound == 5){ //to not send too many sound consecutevely
-    /* P1 SOUND:
-     * 1 Schifo
-     * 2 Schifo microfono
-     * 3 Schifo brop
-     *
-     * 11 Schifo
-     * 12 rrr rararar sembra alieno carino
-     * 13 Schifo
-     * 14 Mrrr carino
-     * 15 MMM...PRRR carino
-     * 16 MMMPRAO fiero
-     * 17 mmmrrrr fiero
-     * 18 scorreggina schifo
-     * 19 schifo
-     * 20 singhiozzo schifo
-     * 31 Schifo
-     *
-     * Nice sounds from 12 to 17
-     */
+
     plat_msgs_happy.sound_index_P1 = 12 + rand()%5; // mammal alien sound
     //plat_msgs_awake.sound_index_P2 = rand()%20; //pirate sound
     counterSound = 0;
@@ -90,7 +92,12 @@ void C_interaction::showHappiness(int loneliness){
   pubPlat.publish(plat_msgs_happy);
 }
 
+/** @brief Main for Task C. The task updates the loneliness value if MiRo receive caresses,
+    and make MiRo acts happily while being rubbed.
 
+    @param loneliness the loneliness value
+    @return loneliness the loneliness updated during the phase
+*/
 int C_interaction::main(int loneliness)
 {
   notRead = true;
@@ -153,7 +160,6 @@ int C_interaction::main(int loneliness)
 
   unsubTopics();
 
-
   /** Miro back to sleep **/
   look_caresses_pkg::platform_control msg;
   msg.body_vel.linear.x = -30; // good choiche for the linear velocity
@@ -168,13 +174,18 @@ int C_interaction::main(int loneliness)
   return loneliness;
 
 }
-
+/**
+ * @brief function to subcribe to specific topics
+ */
 void C_interaction::subTopics(){
   /** read loneliness value **/
   subClass = nh.subscribe("/miro/look4caresses/classifyGesture", 1000, &C_interaction::classCallback, this);
 
 }
 
+/**
+ * @brief function to unsubcribe to topics
+ */
 void C_interaction::unsubTopics(){
   subClass.shutdown();
 }

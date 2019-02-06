@@ -2,6 +2,11 @@
 #include <iostream>
 #include "../header/Aa_faceDetection.h"
 
+/** @brief Costructor for phase Aa task.
+
+    @param nh the ros nodeHandle to subscribe
+    @param pubPlat the Publisher object to publish on topic
+*/
 Aa_faceDetection::Aa_faceDetection(ros::NodeHandle nh, ros::Publisher pubPlat){
   detectedLeft = false;
   detectedFaceConsec = 0;
@@ -10,6 +15,11 @@ Aa_faceDetection::Aa_faceDetection(ros::NodeHandle nh, ros::Publisher pubPlat){
 
 }
 
+
+/** @brief Callback for images from right camera
+
+    @param msgFacesRight the message arrived
+*/
 void Aa_faceDetection::subImgDetectCallbackRight(const opencv_apps::FaceArrayStamped &msgFacesRight){
 
   look_caresses_pkg::platform_control msgVel;
@@ -42,6 +52,11 @@ void Aa_faceDetection::subImgDetectCallbackRight(const opencv_apps::FaceArraySta
   pubPlat.publish(msgVel);
 }
 
+
+/** @brief Callback for images from left camera
+
+    @param msgFacesLeft the message arrived
+*/
 void Aa_faceDetection::subImgDetectCallbackLeft(const opencv_apps::FaceArrayStamped &msgFacesLeft){
 
   if (msgFacesLeft.faces.empty()) {
@@ -52,6 +67,11 @@ void Aa_faceDetection::subImgDetectCallbackLeft(const opencv_apps::FaceArrayStam
   }
 }
 
+
+/**
+ * @brief The main for face detection task. It make MiRo turns around z axis until a face is visible in both cameras
+ * @return 0 for correct execution
+ */
 int Aa_faceDetection::main()
 {
 
@@ -83,6 +103,9 @@ int Aa_faceDetection::main()
     return 0;
 }
 
+/**
+ * @brief function to subcribe to specific topics
+ */
 void Aa_faceDetection::subTopics(){
 
   subImageDetectRight = nh.subscribe("/right/face_detection/faces", 1000, &Aa_faceDetection::subImgDetectCallbackRight, this);
@@ -90,6 +113,10 @@ void Aa_faceDetection::subTopics(){
 
 }
 
+
+/**
+ * @brief function to unsubcribe to topics
+ */
 void Aa_faceDetection::unsubTopics(){
   subImageDetectRight.shutdown();
   subImageDetectLeft.shutdown();

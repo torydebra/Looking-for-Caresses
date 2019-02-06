@@ -3,6 +3,11 @@
 #include <numeric>
 #include "../header/B_approach.h"
 
+/** @brief Costructor for phase B task.
+
+    @param nh the ros nodeHandle to subscribe
+    @param pubPlat the Publisher object to publish on topic
+*/
 B_approach::B_approach(ros::NodeHandle nh, ros::Publisher pubPlat){
 
   sonarMsgs = boost::circular_buffer<float>(averageNum);
@@ -11,6 +16,10 @@ B_approach::B_approach(ros::NodeHandle nh, ros::Publisher pubPlat){
   this->pubPlat = pubPlat;
 }
 
+/** @brief Callback for sonar messages
+
+    @param sensor_range the sonar range arrived
+*/
 void B_approach::sonarCallback(const sensor_msgs::Range &sensor_range)
 {
     look_caresses_pkg::platform_control msg;
@@ -39,6 +48,11 @@ void B_approach::sonarCallback(const sensor_msgs::Range &sensor_range)
     pubPlat.publish(msg);
 }
 
+/**
+ * @brief main for approachin phase. MiRo goes straight until the sensor detect something
+ * (ideally the user hand) sufficently near
+ * @return 0 for correct execution
+ */
 int B_approach::main()
 {
     counter = 0;
@@ -72,10 +86,17 @@ int B_approach::main()
     return 0;
 }
 
+/**
+ * @brief function to subcribe to specific topics
+ */
 void B_approach::subTopics(){
     subRange = nh.subscribe("/miro/rob01/sensors/sonar_range", 1000, &B_approach::sonarCallback, this);
 }
 
+
+/**
+ * @brief function to unsubcribe to topics
+ */
 void B_approach::unsubTopics(){
   subRange.shutdown();
 }

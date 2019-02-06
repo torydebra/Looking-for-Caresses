@@ -5,7 +5,13 @@
 #include "../header/C_interaction.h"
 #include "look_caresses_pkg/platform_control.h"
 
-
+/**
+ * @brief Main ros node to perform all the task. It initialize the task and then run sequentially the specific main of
+ * each task
+ * @param argc
+ * @param argv
+ * @return
+ */
 int main(int argc, char **argv)
 {
   ROS_INFO("[COORD] Started");
