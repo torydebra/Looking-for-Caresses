@@ -105,6 +105,21 @@ int C_interaction::main(int loneliness)
 
   ROS_INFO("[C] I have a Loneliness value of: [%d]", loneliness);
 
+  look_caresses_pkg::platform_control plat_msgs_caresses;
+  float body_config_caresses[4] = {0.0, 0.85, -0.25, -0.25}; // head down
+  float body_config_speed_caresses[4] = {0.0, -1.0, -1.0, -1.0};
+  for (int i =0; i<4; i++){
+    plat_msgs_caresses.body_config[i] = body_config_caresses[i];
+    plat_msgs_caresses.body_config_speed[i] = body_config_speed_caresses[i];
+  }
+
+  ros::Rate loop_rate3(1);
+  for (int i =0; i<3; i++){
+    plat_msgs_caresses.sound_index_P1 = 12 + rand()%5; // mammal alien sound
+    pubPlat.publish(plat_msgs_caresses);
+    loop_rate3.sleep();
+  }
+
   /** INTERACTION PHASE **/
   srand(time(NULL));
 
@@ -122,7 +137,7 @@ int C_interaction::main(int loneliness)
     }
     if (negativeApproach > 25){ // 25 to be sure that the user DONT want to interact
       //miroHappy = false;
-      ROS_INFO("[C] I'm going away :'( %d", negativeApproach);
+      ROS_INFO("[C] I'm going away :'( (loneliness: %d)", loneliness);
       break; //exit because user does not want to interact
     }
     if (loneliness < (20 - rand() % 10)) {

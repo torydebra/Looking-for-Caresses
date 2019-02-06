@@ -66,9 +66,16 @@ int Aa_faceDetection::main()
       ros::spinOnce();
       loop_rate.sleep();
     }
+
     look_caresses_pkg::platform_control plat_msgs_saw;
-    plat_msgs_saw.sound_index_P2 = rand()%20; //pirate sound
-    pubPlat.publish(plat_msgs_saw);
+    ros::Rate loop_rate2(1);
+    for (int i =0; i<5; i++){
+      plat_msgs_saw.sound_index_P2 = rand()%20; //pirate sound
+      pubPlat.publish(plat_msgs_saw);
+      //ros::spinOnce();
+      loop_rate2.sleep();
+    }
+
     ROS_INFO("[Aa] I saw you consecutevely for 3 seconds");
 
     unsubTopics();
