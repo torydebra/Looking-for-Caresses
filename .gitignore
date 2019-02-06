@@ -207,3 +207,8 @@ src/CMakeLists.txt
 # QT workspace
 look_caresses_miro.workspace
 
+# Tex files
+*.out
+*.log
+*.aux
+*.synctex.gz
