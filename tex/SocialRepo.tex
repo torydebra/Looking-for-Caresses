@@ -1,4 +1,4 @@
-\documentclass[12pt,peerreviewca, a4paper, onecolumn]{IEEEtran}
+\documentclass[12pt,peerreviewca, a4paper, onecolumn]{article}
 
 \pagenumbering{gobble}
 
@@ -19,17 +19,15 @@ includefoot,heightrounded]{geometry}
 \graphicspath{ {./images/} }
 \usepackage{caption}
 \usepackage{floatrow}
-\ifCLASSOPTIONcompsoc
-\usepackage[caption=false,font=normalsize,labelfon
-t=sf,textfont=sf]{subfig}
-\else
-\usepackage[caption=false,font=footnotesize]{subfi
-	g}
+\usepackage{titlesec}
+\titleformat{\section}[block]{\large\bfseries}{\thesection}{4mm}{}
+
+\titleformat{\subsection}[block]{\normalsize\bfseries}{\thesubsection}{2mm}{}
 
 \begin{document}
 	\maketitle
 	
-	\section{{\large Introduction}}
+	\section{Introduction}
 	MiRo from Consequential Robotics is a bio-inspired robot. It has different sensors to interact with the enviroment: cameras, cliff sensors, light sensor, sonar, microphone.\\
 	In this project, MiRo behave as companion, standing on the desk while the user is working (for example, at pc). We exploit joints and sensors to make the robot interact with the user, and make MiRo act like a pet should do: making noise, show sleepiness, wag tail if happy, and so on.	
 	
@@ -41,15 +39,17 @@ t=sf,textfont=sf]{subfig}
 	\end{center}
 	{\small The diagram on the code structure: straight line with numbers resprent execution flow. After step 8 the cycle begin again from step 1. Dotted line represent data exchanged through ros publish-subscribe method.  The communications with the robot (again with ros topics) to receive sensor data and send platform command are not shown}\\
 
-	The \textbf{coordinator} is a ROS node responsible to call different classes related to the 4 different phases. 	
-	\subsection{Task A: Sleeping Phase}
+    \newpage
+	\noindent The \textbf{coordinator} is a ROS node responsible to call different classes related to the 4 different phases: Awakening (\ref{subsec:a}); Face Recognition (\ref{subsec:aa}); Approaching (\ref{subsec:b}); Interaction (\ref{subsec:c}).
+	\subsection{Task A: Awakening Phase}
+	\label{subsec:a}
 	In task A, MiRo is sleeping. The task sends through ROS topic commands to shown this. This results in MiRo with close eyelids and head down. While sleeping, \textbf{loneliness} value increases, until MiRo woke up or is is touched by user.
-	\subsection{Task Aa: Face Recognition Phase}
+	\subsection{Task Aa: Face Recognition Phase}	\label{subsec:aa}
 	Now MiRo looks for user face. To do this, we rely on the \textit{face detector} node. This node (from open-cv-apps package) is subscribed to the topic where left and right cameras send image flow. Then, it publish face detection infos on another topic. We read from this topic if a face is detected or not.
 	If MiRo does not see a face with neither cameras, it turns on z axis. If it see a face with one cameras, it turn a bit slower clockwise or counter-clockwise to catch the face with both cameras, and at this point it stops turning. When MiRo see the face with both cameras for 3 consecutevely seconds, the task finished.
-	\subsection{Task B: Approaching Phase}
+	\subsection{Task B: Approaching Phase}	\label{subsec:b}
 	MiRo gets near to the user using the sonar on his muzzle. The user should put the hand toward MiRo muzzle, to start interaction with him. If the sonar detect something (i.e., the hand) sufficently near, MiRo stops and next phase starts.
-	\subsection{Task C: Interaction Phase}  
+	\subsection{Task C: Interaction Phase} 	\label{subsec:c} 
 	The user can choose to interact or not with MiRo. If he rubs him on the body, the \textbf{loneliness} value will decrease. Meanwhile, MiRo will act like real pet: the more is rubbed the more he shown his happiness waging the tail, moving the ears, and making "mammal" sounds.\\
 	If the user does not want to interact any more, he must pat MiRo on head, and he will immediately go to sleep, but with a higher value of \textbf{loneliness}.\\
 	To understand the touches, we use a node implemented by others ().
