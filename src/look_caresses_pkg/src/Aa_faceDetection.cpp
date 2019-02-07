@@ -96,7 +96,7 @@ int Aa_faceDetection::main()
       loop_rate2.sleep();
     }
 
-    ROS_INFO("[Aa] I saw you consecutevely for 3 seconds");
+    ROS_INFO("[Aa] I saw you consecutevely for 1.5 seconds");
 
     unsubTopics();
     ROS_INFO("[Aa] Finished");
