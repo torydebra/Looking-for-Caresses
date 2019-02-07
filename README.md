@@ -47,6 +47,8 @@ Be sure to have correctly setup your machine and Miro, as described here [MIRO_s
         ```bash
         rosrun look_caresses_pkg Coordinator
         ```
+## Video
+A demonstration video is visible [here](https://streamable.com/sux6n)
 
 ## Credits
 #### Developers
