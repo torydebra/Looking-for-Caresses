@@ -19,8 +19,8 @@ More detail  [here](https://github.com/EmaroLab/Looking-for-Caresses/blob/master
 * [Opencv 3.4](https://docs.opencv.org/3.3.0/d7/d9f/tutorial_linux_install.html)
 * Run in terminal:
     ```bash
-    sudo apt-install ros-kinetic-opencv3 #(should be already installed with previous point)
-    sudo apt-install ros-kinetic-opencv-apps
+    sudo apt install ros-kinetic-opencv3 #(should be already installed with previous point)
+    sudo apt install ros-kinetic-opencv-apps
     ```
 ##### For touch pattern recognition
 * Run in terminal:
