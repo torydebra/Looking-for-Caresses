@@ -1,5 +1,8 @@
 # Looking-for-Caresses
 Project for Social Robotics 2018/19 course of Robotics Engineering.
+
+[**website**](https://emarolab.github.io/Looking-for-Caresses/)
+
 ## Description
 MiRo is a small pet-like robot intended to be a companion. In this project, MiRo behave as companion, standing on the desk while the user is working (for example, at pc). 
 * **Task A: Awakening** Randomly, MiRo awakes to look for caresses from the user. The more the time pass, the more MiRo feels lonely so the probability that it wakes up increase. Also, if the user touches MiRo, it awakes immediately.
@@ -56,4 +59,4 @@ A demonstration video is visible [here](https://streamable.com/sux6n)
 * [fafux](https://github.com/fafux)
 #### Supports
 * The Pattern recognition node (DataInput.py) is taken from [here](https://github.com/EmaroLab/Miro_SocialRobot/blob/master/README.md)
-* [MIRO website](http://labs.consequentialrobotics.com/))
+* [MIRO website](http://labs.consequentialrobotics.com/)
