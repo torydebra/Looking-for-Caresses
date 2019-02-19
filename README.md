@@ -1,7 +1,5 @@
-# Looking-for-Caresses
+# [Looking-for-Caresses](https://emarolab.github.io/Looking-for-Caresses/)
 Project for Social Robotics 2018/19 course of Robotics Engineering.
-
-[**website**](https://emarolab.github.io/Looking-for-Caresses/)
 
 ## Description
 MiRo is a small pet-like robot intended to be a companion. In this project, MiRo behave as companion, standing on the desk while the user is working (for example, at pc). 
