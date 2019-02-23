@@ -230,6 +230,10 @@ target_link_libraries(Coordinator Aa_faceDetection)
 target_link_libraries(Coordinator B_approach)
 target_link_libraries(Coordinator C_interaction)
 add_dependencies(Coordinator look_caresses_pkg_generate_messages_cpp)
+add_dependencies(A_awakening look_caresses_pkg_generate_messages_cpp)
+add_dependencies(Aa_faceDetection look_caresses_pkg_generate_messages_cpp)
+add_dependencies(B_approach look_caresses_pkg_generate_messages_cpp)
+add_dependencies(C_interaction look_caresses_pkg_generate_messages_cpp)
 
 catkin_install_python(PROGRAMS src/Data_input.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
