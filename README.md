@@ -11,7 +11,7 @@ Then it comes near to the user. The user must put a hand close to MiRo, to make 
 * **Task C: Interaction**
 The user can choose to caresses MiRo on the back to make him happy. After some time, Miro will be satisfied and he will return to sleep. If the user don't want to interact, he must pat MiRo on head, and MiRo will go to sleep immediately.
 
-More detail  [here](https://github.com/EmaroLab/Looking-for-Caresses/blob/master/tex/SocialRepo.pdf)
+More detail in the [report](https://github.com/EmaroLab/Looking-for-Caresses/blob/master/tex/SocialRepo.pdf)
 
 ## How To Run
 ### Prerequisites
