@@ -38,11 +38,11 @@ includefoot,heightrounded]{geometry}
 	\end{center}
 	{\small The diagram on the code structure: straight lines with numbers resprent execution flow. After step 8 the cycle begins again from step 1. Dotted lines represent data exchanged through ROS publish-subscribe method. The communications with the robot (again with ROS topics), to receive sensor data and send platform commands, are not shown.}\\
 
-	\noindent The \textbf{coordinator} is a ROS node responsible to handle different classes related to the 4 different phases: Awakening (\ref{subsec:a}); Face Recognition (\ref{subsec:aa}); Approaching (\ref{subsec:b}); Interaction (\ref{subsec:c}).
+	\noindent The \textbf{coordinator} is a ROS node responsible to handle different classes related to the 4 different phases: Awakening (\ref{subsec:a}); Face Detection (\ref{subsec:aa}); Approaching (\ref{subsec:b}); Interaction (\ref{subsec:c}).
 	\subsection{Task A: Awakening Phase}
 	\label{subsec:a}
 	In task A, MiRo is sleeping. The task sends through ROS topic commands to show this (closed eyelids and head down). While sleeping, \textbf{loneliness} value increases, until MiRo wakes up alone or until he is touched by the user.
-	\subsection{Task Aa: Face Recognition Phase}	\label{subsec:aa}
+	\subsection{Task Aa: Face Detection Phase}	\label{subsec:aa}
 	In task Aa MiRo looks for the user face. To do this, we rely on the \textit{face detector} node  (from \href{http://wiki.ros.org/opencv_apps}{opencv\_apps} package). This node is subscribed to the topic where left and right cameras publish the image flow, and publish face detection infos on another topic. We read from this last topic if a face is detected or not.
 	If MiRo does not see a face with neither cameras, it turns on z axis. If he sees a face with only one camera, it turns a bit slower clockwise or counter-clockwise to catch the face with both cameras, and at this point it stops turning. When MiRo sees the face with both cameras for 1.5 consecutively seconds, the task finishes.
 	\subsection{Task B: Approaching Phase}	\label{subsec:b}
@@ -75,7 +75,7 @@ includefoot,heightrounded]{geometry}
 	
 	\subsection{Code improvements}
 	The more critical phase is the interaction one. The sensors of MiRo are really simple (binary ones) and the ones on the head are not so intuitive and easy to use. Also, they are positioned on particular points, and not spread on the whole body. For this, any pattern recognition algorithm is difficult to use. So to solve the problem we differentiate the behaviour basing on body and head touches. If the user wants to interact with MiRo, he has to rub him on body, and, if not, he has to touch him on the head. This is done to avoid confusion in detecting the pattern. A further work can focuses on this particular problem.\\
-	Also the face recognition can be improved helping in some way the task; for example, moving and not only turning the body or exploiting the other joints of the neck (pitch and yaw).\\
+	Also the face detection can be improved helping in some way the task; for example, moving and not only turning the body or exploiting the other joints of the neck (pitch and yaw).\\
 	Another work could be done towards improving the interaction, making use, for example, also of the microphones on MiRo ears.
  
 	 
